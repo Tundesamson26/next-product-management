@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@appwrite.io/pink": "^0.0.6",
+    "appwrite": "^11.0.0",
     "eslint": "8.41.0",
     "eslint-config-next": "13.4.3",
     "next": "13.4.3",
