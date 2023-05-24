@@ -1,7 +1,17 @@
-import { Client } from 'appwrite';
+import { Client, Account, Databases } from "appwrite";
 
-const client = new Client();
+export const client = new Client();
+export const account = new Account(client);
+export const databases = new Databases(client);
 
 client
-    .setEndpoint('https://cloud.appwrite.io/v1')
-    .setProject('646b74256355239828bf');
+  .setEndpoint("https://cloud.appwrite.io/v1")
+  .setProject("646b74256355239828bf");
+
+export const createAnonymousSession = async () => {
+  try {
+    await account.createAnonymousSession();
+  } catch (err) {
+    console.log(err);
+  }
+};

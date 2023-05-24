@@ -1,5 +1,7 @@
 import './globals.css'
 import { Inter } from 'next/font/google'
+import "@appwrite.io/pink";
+import "@appwrite.io/pink-icons";
 
 const inter = Inter({ subsets: ['latin'] })
 
