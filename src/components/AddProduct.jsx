@@ -1,10 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import { useEffect, useState } from "react";
-import { account, createAnonymousSession } from "../../utils/web-init";
+import { createAnonymousSession } from "../../utils/web-init";
 import "@appwrite.io/pink";
 import "@appwrite.io/pink-icons";
-import { Client, Account, Databases, ID } from "appwrite";
+import { Client, Databases, ID } from "appwrite";
 
 export default function AddProduct() {
   const [showModal, setShowModal] = useState(false);
@@ -16,7 +16,6 @@ export default function AddProduct() {
   const [productSize, setProductSize] = useState("");
 
   const client = new Client();
-  const account = new Account(client);
   const databases = new Databases(client);
 
   client
@@ -46,19 +45,6 @@ export default function AddProduct() {
         alert("product not saved")
       });
   }
-
-  useEffect(() => {
-    console.log("iiiii");
-    if (account.get !== null) {
-      try {
-        client.subscribe("documents", (response) => {
-          console.log( "anything", response);
-        });
-      } catch (error) {
-        console.log(error, "error");
-      }
-    }
-  }, []);
   
 
   useEffect(() => {
