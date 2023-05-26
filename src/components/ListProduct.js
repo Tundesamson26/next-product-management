@@ -1,34 +1,44 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { client, account, databases } from "../../utils/web-init";
-import Image from "next/image";
+// import { ID } from "appwrite";
 
 function ListProduct() {
   const [products, setProducts] = useState([]);
-  const space = useRef("2")
 
   const getProduct = async () => {
-    const { products } = await databases
-      .listDocuments("646b75921f4c1d8f9970", "646b76a75c344008e43c")
-      .then(
-        function (products) {
-          console.log("anything that shows it worked", products); // Success
-        },
-        function (error) {
-          console.log(error); // Failure
-        }
+    try {
+      const response = await databases.listDocuments(
+        "646b75921f4c1d8f9970",
+        "646b76a75c344008e43c"
       );
-    setProducts(products);
-    return products;
+      const products = response.documents;
+      console.log("Successfully retrieved products:", products);
+      setProducts(products);
+      return products;
+    } catch (error) {
+      console.log("Error retrieving products:", error);
+      // Handle the error accordingly (e.g., display an error message)
+    }
   };
 
-  // useEffect(() => {
-  //   const run=async()=>{
-  //     const data=await getProduct()
-  //     setProducts(data.products)
-  //   }
-  //   run()
-  // }, []);
+  const deleteProduct = async (document_id) => {
+    try {
+      await databases.deleteDocument(
+        "646b75921f4c1d8f9970",
+        "646b76a75c344008e43c",
+        document_id
+      );
+  
+      alert("Item has been deleted successfully");
+      await getProduct(); 
+    } catch (error) {
+      console.log("Error deleting product:", error.message);
+      alert("Item was not deleted");
+    }
+  };
+  
 
   useEffect(() => {
     getProduct();
@@ -49,94 +59,89 @@ function ListProduct() {
 
   return (
     <div className="container">
-      <div
-        className="card u-flex u-main-space-between"
-        style={{
-          boxShadow: "var(--shadow-small)",
-          paddingTop: "11px",
-          paddingBottom: "11px",
-          paddingLeft: "30px",
-          paddingRight: "30px",
-          borderRadius: "var(--border-radius-small)",
-          marginBottom: "15px",
-        }}
-      >
-        {products.map((product)=>{})}
-        <section className="u-flex u-cross-center">
-          <div
-            className="u-flex u-main-center u-cross-center"
-            style={{
-              height: "40px",
-              width: "40px",
-              backgroundColor: "#E084A9",
-              borderRadius: "var(--border-radius-circular)",
-              marginRight: "30px",
-            }}
-          >
-            <p
-              className="u-bold"
-              style={{
-                color: "hsl(var(--color-neutral-0))",
-                letterSpacing: "4.5%",
-              }}
+      <table className="table is-selected-columns-mobile">
+        <thead className="table-thead">
+          <tr className="table-row">
+            <th className="table-thead-col" style={{ "--p-col-width": 100 }}>
+              <span className="eyebrow-heading-3">Product Name</span>
+            </th>
+            <th
+              className="table-thead-col is-only-desktop"
+              style={{ "--p-col-width": 100 }}
             >
-              {/* {productImage} */}
-            </p>
-          </div>
-          <div>
-            <p
-              className="u-bold text"
-              style={{
-                color: "hsl(var(--color-neutral-500))",
-                marginBottom: "7px",
-                textTransform: "capitalize",
-              }}
+              <span className="eyebrow-heading-3">Image</span>
+            </th>
+            <th
+              className="table-thead-col is-only-desktop"
+              style={{ "--p-col-width": 200 }}
             >
-              {/* {productName} */}
-            </p>
-            <p className="text" style={{ marginBottom: "7px" }}>
-              {/* {productDesc} */}
-            </p>
-          </div>
-        </section>
-        <section>
-          <div
-            className="u-flex u-cross-center"
-            style={{ marginBottom: "8px" }}
-          >
-            <p className="icon-book-open" style={{ marginRight: "15px" }}></p>
-            {/* <h5 className="u-bold">USD {productPrice}</h5> */}
-          </div>
-          <div
-            className="u-bold"
-            style={{
-              paddingTop: "4px",
-              paddingBottom: "4px",
-              paddingLeft: "18px",
-              paddingRight: "18px",
-              backgroundColor: "#DDDDFB",
-              color: "#5D5FEF",
-              textTransform: "uppercase",
-              borderRadius: "var(--border-radius-medium)",
-              fontSize: "10px",
-            }}
-          >
-            {/* {productSize} */}
-          </div>
-
-          <div class="">
-            {/* <span class="text">{{ item }}</span> */}
-            <div class="u-flex u-main-end u-cross-center u-row-gap-32 u-padding-inline-12 u-cursor-pointer">
-              <span
-                class="icon-pencil"
-                aria-hidden="true"
-                style={{ 'marginRight': space + 'em' }}
-              ></span>
-              <span class="icon-trash" aria-hidden="true"></span>
-            </div>
-          </div>
-        </section>
-      </div>
+              <span className="eyebrow-heading-3">Description</span>
+            </th>
+            <th
+              className="table-thead-col is-only-desktop"
+              style={{ "--p-col-width": 100 }}
+            >
+              <span className="eyebrow-heading-3">Price</span>
+            </th>
+            <th
+              className="table-thead-col is-only-desktop"
+              style={{ "--p-col-width": 120 }}
+            >
+              <span className="eyebrow-heading-3">Size</span>
+            </th>
+            <th
+              className="table-thead-col"
+              style={{ "--p-col-width": 40 }}
+            ></th>
+          </tr>
+        </thead>
+        <tbody className="table-tbody">
+          {products.map((product) => (
+            <tr key={product.id} className="table-row">
+              <td className="table-col" data-title="Name">
+                <div className="u-inline-flex u-cross-center u-gap-12">
+                  <span className="text u-break-word u-line-height-1-5">
+                    {product.productName}
+                  </span>
+                </div>
+              </td>
+              <td className="table-col is-only-desktop" data-title="Type">
+                <div className="text">
+                  <span className="image">
+                    <img
+                      className="avatar"
+                      width="32"
+                      height="32"
+                      src={product.productImage}
+                      alt=""
+                    />
+                  </span>
+                </div>
+              </td>
+              <td className="table-col is-only-desktop" data-title="Type">
+                <div className="text">
+                  <span className="text">{product.productDesc}</span>
+                </div>
+              </td>
+              <td className="table-col is-only-desktop" data-title="Size">
+                <span className="tag">{product.productPrice}</span>
+              </td>
+              <td className="table-col is-only-desktop" data-title="Created">
+                <time className="text">{product.productSize}</time>
+              </td>
+              <td className="table-col u-overflow-visible">
+                <button
+                  className="button is-text is-only-icon"
+                  aria-label="more options"
+                  onClick={deleteProduct}
+                >
+                  <span className="icon-trash" aria-hidden="true"></span>
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }

@@ -24,7 +24,7 @@ export default function AddProduct() {
 
   const createProduct = async (e) => {
     e.preventDefault();
-    await databases.createDocument(
+    const promise = await databases.createDocument(
       '646b75921f4c1d8f9970',
       '646b76a75c344008e43c',
       ID.unique(),
@@ -36,16 +36,22 @@ export default function AddProduct() {
         productSize: productSize
       }
     )
-      .then((response) => {
-        console.log(response);
-        alert("product saved successfully")
-        e.preventDefault();
-      }, function (error) {
-        console.log(error);
-        alert("product not saved")
-      });
+    setProductName('');
+    setProductDesc('');
+    setProductImage('');
+    setProductPrice('');
+    setProductSize('');
+    alert("product saved successfully")
+    promise.then((response) => {
+      console.log(response);
+      
+      e.preventDefault();
+    }, function (error) {
+      console.log(error);
+      alert("product not saved")
+    });
   }
-  
+
 
   useEffect(() => {
     createAnonymousSession();
@@ -139,7 +145,7 @@ export default function AddProduct() {
                   <button className="button is-secondary" onClick={() => setShowModal(false)}>
                     <span className="text">Cancel</span>
                   </button>
-                  <button className="button" type="submit">
+                  <button className="button" type="submit" onClick={createProduct}>
                     <span className="text">Save</span>
                   </button>
                 </div>
