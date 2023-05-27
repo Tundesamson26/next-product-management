@@ -2,7 +2,6 @@
 "use client";
 import { useEffect, useState } from "react";
 import { client, account, databases } from "../../utils/web-init";
-// import { ID } from "appwrite";
 
 function ListProduct() {
   const [products, setProducts] = useState([]);
@@ -148,6 +147,3 @@ function ListProduct() {
 
 export default ListProduct;
 
-// export async function getServerProps(){
-//   return {}
-// }
