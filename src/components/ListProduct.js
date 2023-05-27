@@ -30,15 +30,14 @@ function ListProduct() {
         "646b76a75c344008e43c",
         document_id
       );
-  
+
       alert("Item has been deleted successfully");
-      await getProduct(); 
+      await getProduct();
     } catch (error) {
       console.log("Error deleting product:", error.message);
       alert("Item was not deleted");
     }
   };
-  
 
   useEffect(() => {
     getProduct();
@@ -97,7 +96,7 @@ function ListProduct() {
         </thead>
         <tbody className="table-tbody">
           {products.map((product) => (
-            <tr key={product.id} className="table-row">
+            <tr key={product.$id} className="table-row">
               <td className="table-col" data-title="Name">
                 <div className="u-inline-flex u-cross-center u-gap-12">
                   <span className="text u-break-word u-line-height-1-5">
@@ -132,8 +131,9 @@ function ListProduct() {
               <td className="table-col u-overflow-visible">
                 <button
                   className="button is-text is-only-icon"
+                  type="button"
                   aria-label="more options"
-                  onClick={deleteProduct}
+                  onClick={() => deleteProduct(product.$id)}
                 >
                   <span className="icon-trash" aria-hidden="true"></span>
                 </button>
