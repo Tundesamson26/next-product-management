@@ -24,32 +24,30 @@ export default function AddProduct() {
 
   const createProduct = async (e) => {
     e.preventDefault();
-    const promise = await databases.createDocument(
-      '646b75921f4c1d8f9970',
-      '646b76a75c344008e43c',
-      ID.unique(),
-      {
-        productName: productName,
-        productDesc: productDesc,
-        productImage: productImage,
-        productPrice: productPrice,
-        productSize: productSize
-      }
-    )
-    setProductName('');
-    setProductDesc('');
-    setProductImage('');
-    setProductPrice('');
-    setProductSize('');
-    alert("product saved successfully")
-    promise.then((response) => {
-      console.log(response);
-      
+    try{
+       await databases.createDocument(
+        '646b75921f4c1d8f9970',
+        '646b76a75c344008e43c',
+        ID.unique(),
+        {
+          productName: productName,
+          productDesc: productDesc,
+          productImage: productImage,
+          productPrice: productPrice,
+          productSize: productSize
+        }
+      )
+      setProductName('');
+      setProductDesc('');
+      setProductImage('');
+      setProductPrice('');
+      setProductSize('');   
+      alert("product saved successfully")
       e.preventDefault();
-    }, function (error) {
-      console.log(error);
+    }catch(error){
+      console.log(error.message);
       alert("product not saved")
-    });
+    }
   }
 
 
